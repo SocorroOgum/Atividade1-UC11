@@ -2,6 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 import javax.swing.JOptionPane;
 import java.util.List;
 /**
@@ -141,17 +143,30 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        ProdutosDTO produto = new ProdutosDTO();
-        String nome = cadastroNome.getText();
-        String valor = cadastroValor.getText();
-        String status = "A Venda";
-        produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
-        produto.setStatus(status);
-        
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
-        
+        try {
+        conectaDAO dao = new conectaDAO();
+        Connection conn = (Connection) dao.connectDB();
+
+        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
+
+        PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
+        stmt.setString(1, cadastroNome.getText());
+        stmt.setDouble(2, Double.parseDouble(cadastroValor.getText()));
+        stmt.setString(3, "A Venda");
+
+        int linhasAfetadas = stmt.executeUpdate();
+
+        if (linhasAfetadas > 0) {
+            JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Falha ao realizar o cadastro!");
+        }
+
+        conn.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao salvar: " + e.getMessage());
+     }     
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
