@@ -1,5 +1,5 @@
-# Atividade1-UC11
-Repositório da atividade 1 da UC11 do Senac 
+# Atividade-UC11
+Repositório de atividades da UC11 do Senac 
 
  Aplicativo de casa de leilões 
 
